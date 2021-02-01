@@ -34,9 +34,12 @@ export default {
     themes: [],
   }),
   mounted() {
-    this.$root.eventSystem.createActionByCallback("updateTheme",this.$root.guid, this.updateTheme.bind(this))
+    this.$root.eventSystem.createActionByCallback(
+      'updateTheme',
+      this.$root.guid,
+      this.updateTheme.bind(this)
+    );
     this.$root.eventSystem.subscribeByNames('ThemeUpdate', 'updateTheme');
-
 
     this.$root.styleSystem.getThemes().then(result => {
       this.themes = result;
@@ -47,7 +50,7 @@ export default {
     changeTheme(name) {
       this.selectedTheme = name;
       this.$root.styleSystem.setTheme(this.selectedTheme);
-      this.$root.eventSystem.createAndPublish(this.$root.guid, "ThemeUpdate")
+      this.$root.eventSystem.createAndPublish(this.$root.guid, 'ThemeUpdate');
     },
     compactWorkspacePanels() {
       this.$root.eventSystem.createAndPublish(this.$root.guid, 'CompactWorkspacePanel');
@@ -62,7 +65,6 @@ export default {
     updateTheme() {
       const themeObj = this.$root.styleSystem.getCurrentTheme();
       this.$root.styleSystem.setVariablesToElement(this.$el, themeObj);
-      console.log(123);
     },
   },
 };
