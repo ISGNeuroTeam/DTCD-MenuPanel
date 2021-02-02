@@ -1,10 +1,9 @@
 {
-  "name": "MenuPanel",
-  "version": "1.0.0",
-  "description": "",
+  "name": "menu-panel",
+  "version": "0.1.0",
   "main": "MenuPanel.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "rollup -cw",
     "build": "rollup -c"
   },
@@ -20,6 +19,7 @@
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@rollup/plugin-replace": "^2.3.3",
     "commonjs": "^0.0.1",
+    "jest": "^26.6.3",
     "rollup": "^2.28.2",
     "rollup-plugin-styles": "^3.10.0",
     "rollup-plugin-vue": "5.0.0",
