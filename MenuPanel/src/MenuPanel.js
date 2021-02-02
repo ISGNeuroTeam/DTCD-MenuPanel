@@ -12,7 +12,6 @@ export class Plugin extends PanelPlugin {
 
 	constructor(guid, selector, styleSystem) {
 		super();
-		console.log(selector);
 		let eventSystem = new EventSystemAdapter();
 		let storageSystem = new StorageSystemAdapter();
 
