@@ -1,5 +1,5 @@
 import App from './App.vue';
-import {PanelPlugin, EventSystemAdapter, StorageSystemAdapter} from './../../../DTCD-SDK';
+import {PanelPlugin, EventSystemAdapter, StorageSystemAdapter, StyleSystemAdapter} from './../../../DTCD-SDK';
 
 export class Plugin extends PanelPlugin {
 	static getRegistrationMeta() {
@@ -10,9 +10,10 @@ export class Plugin extends PanelPlugin {
 		};
 	}
 
-	constructor(guid, selector, styleSystem) {
+	constructor(guid, selector) {
 		super();
 		let eventSystem = new EventSystemAdapter();
+		let styleSystem = new StyleSystemAdapter();
 		let storageSystem = new StorageSystemAdapter();
 
 		eventSystem.registerEvent(eventSystem.createEvent(guid, 'ChangeWorkspaceEditMode'));

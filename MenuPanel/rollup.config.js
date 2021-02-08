@@ -14,7 +14,7 @@ const pluginName = 'MenuPanel';
 
 const projectSrcDir = path.join(path.resolve(__dirname), 'src');
 
-const fileDest = watch ? `./../DTCD/server/plugins/${pluginName}.js` : `./dist/${pluginName}.js`;
+const fileDest = watch ? `./../../DTCD/server/plugins/${pluginName}.js` : `./dist/${pluginName}.js`;
 
 const plugins = [
 	nodeResolve({browser: true}),
