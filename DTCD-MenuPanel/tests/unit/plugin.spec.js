@@ -1,10 +1,10 @@
 import {Plugin} from '../../src/MenuPanel';
-import {EventSystemAdapter, StorageSystemAdapter, StyleSystemAdapter} from '../../../../DTCD-SDK/DTCD-SDK';
+import {EventSystemAdapter, StorageSystemAdapter, StyleSystemAdapter} from './../../../DTCD-SDK/index';
 
 import MenuPanel from './../../src/components/MenuPanel.vue';
 import {mount} from '@vue/test-utils';
 
-jest.mock('./../../../../DTCD-SDK/DTCD-SDK/Adapters/EventSystemAdapter', () => {
+jest.mock('./../../../DTCD-SDK/Adapters/EventSystemAdapter', () => {
 	return {
 		EventSystemAdapter: jest.fn().mockImplementation(() => {
 			return {
@@ -17,8 +17,8 @@ jest.mock('./../../../../DTCD-SDK/DTCD-SDK/Adapters/EventSystemAdapter', () => {
 		}),
 	};
 });
-jest.mock('./../../../../DTCD-SDK/DTCD-SDK/Adapters/StorageSystemAdapter');
-jest.mock('./../../../../DTCD-SDK/DTCD-SDK/Adapters/StyleSystemAdapter', () => {
+jest.mock('./../../../DTCD-SDK/Adapters/StorageSystemAdapter');
+jest.mock('./../../../DTCD-SDK/Adapters/StyleSystemAdapter', () => {
 	return {
 		StyleSystemAdapter: jest.fn().mockImplementation(() => {
 			return {
