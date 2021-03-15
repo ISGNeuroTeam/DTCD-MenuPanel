@@ -41,10 +41,6 @@ export default {
 		format: 'esm',
 		sourcemap: false,
 	},
-	globals: {
-		vue: 'Vue',
-		'vue-router': 'VueRouter',
-	},
 	watch: {
 		include: ['./src/**'],
 	},
