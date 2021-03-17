@@ -7,7 +7,7 @@ Required section:
 Addition section:
 endef
 
-PROJECT_NAME = MenuPanel
+PROJECT_NAME = DTCD-MenuPanel
 
 GENERATE_VERSION = $(shell jq .version ./${PROJECT_NAME}/package.json )
 GENERATE_BRANCH = $(shell git name-rev $$(git rev-parse HEAD) | cut -d\  -f2 | sed -re 's/^(remotes\/)?origin\///' | tr '/' '_')
@@ -15,9 +15,14 @@ GENERATE_BRANCH = $(shell git name-rev $$(git rev-parse HEAD) | cut -d\  -f2 | s
 SET_VERSION = $(eval VERSION=$(GENERATE_VERSION))
 SET_BRANCH = $(eval BRANCH=$(GENERATE_BRANCH))
 
+DEV_STORAGE = http://storage.dev.isgneuro.com/repository/components
+DTCD_SDK = DTCD-SDK
+DTCD_SDK_URL = $(DEV_STORAGE)/$(DTCD_SDK)/$(DTCD_SDK)-0.1.1-master-0002.tar.gz
+
+
 .SILENT:
 
-COMPONENTS :
+COMPONENTS = sdk dependencies
 
 export ANNOUNCE_BODY
 all:
@@ -29,7 +34,7 @@ pack: build
 	echo Create archive \"$(PROJECT_NAME)-$(VERSION)-$(BRANCH).tar.gz\"
 	cd build; tar czf ../$(PROJECT_NAME)-$(VERSION)-$(BRANCH).tar.gz .
 
-build: ${PROJECT_NAME}/node_modules $(COMPONENTS)
+build: $(COMPONENTS)
 	# required section
 	echo Build!
 	$(SET_VERSION)
@@ -46,18 +51,30 @@ clean:
 	# required section"
 	$(SET_VERSION)
 	$(SET_PROJECT_NAME)
+	rm -rf ./$(DTCD_SDK)/
 	rm -rf build ./$(PROJECT_NAME)/dist ./$(PROJECT_NAME)/node_modules/ ./*-lock.* ./$(PROJECT_NAME)/*-lock.* $(PROJECT_NAME)-*.tar.gz \
 
-test: $(PROJECT_NAME)/node_modules
+test: $(COMPONENTS)
 	# required section
 	echo "Testing..."
 	echo $(PROJECT_NAME)
 	npm run --prefix ./$(PROJECT_NAME) test
 	
-dev: ${PROJECT_NAME}/node_modules $(COMPONENTS)
+dev: $(COMPONENTS)
 	echo Development mode!
 	npm run dev --prefix ./$(PROJECT_NAME)
 
-$(PROJECT_NAME)/node_modules:
-	echo Start command: npm i
-	npm i --prefix ./$(PROJECT_NAME)
+dependencies:
+	echo Installing project dependencies...
+	if ! [ -d ./$(PROJECT_NAME)/node_modules ];\
+		then npm i --prefix ./$(PROJECT_NAME) && echo Project dependencies downloaded.;\
+		else echo Project dependencies is already downloaded.;\
+	fi
+
+sdk:
+	echo Downloading $(DTCD_SDK)...
+	if ! [ -d ./$(DTCD_SDK) ];\
+		then curl -# $(DTCD_SDK_URL) | tar -zx ./$(DTCD_SDK) && echo $(DTCD_SDK) downloaded.;\
+		else echo $(DTCD_SDK) is already downloaded.;\
+	fi
+

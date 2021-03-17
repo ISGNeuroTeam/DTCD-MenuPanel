@@ -1,13 +1,13 @@
 <template>
   <div class="menu-panel-container">
     <div class="menu-panel-button-container">
-      <div class="btn" @click="changeEditMode" :class="{ pressed: editMode }">
+      <div id="changeModeBtn" class="btn" @click="changeEditMode" :class="{ pressed: editMode }">
         <i class="fas fa-edit"></i> Режим {{ editMode ? 'просмотра' : 'редактирования' }}
       </div>
-      <div class="btn" v-if="editMode" @click="defaultAddNewPanel">
+      <div id="addNewPanelBtn" class="btn" v-if="editMode" @click="defaultAddNewPanel">
         <i class="fas fa-plus"></i> Добавить панель
       </div>
-      <div class="btn" v-if="editMode" @click="compactWorkspacePanels">Выровнять</div>
+      <div id="compactWorkspaceBtn" class="btn" v-if="editMode" @click="compactWorkspacePanels">Выровнять</div>
     </div>
     <div v-if="editMode" class="menu-panel-theme-container">
       <p>Выбрать тему:</p>

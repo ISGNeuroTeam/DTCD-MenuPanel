@@ -1,5 +1,5 @@
 import App from './App.vue';
-import {PanelPlugin, EventSystemAdapter, StorageSystemAdapter, StyleSystemAdapter} from './../../../DTCD-SDK';
+import {PanelPlugin, EventSystemAdapter, StorageSystemAdapter, StyleSystemAdapter} from './../../DTCD-SDK/index';
 
 export class Plugin extends PanelPlugin {
 	static getRegistrationMeta() {
