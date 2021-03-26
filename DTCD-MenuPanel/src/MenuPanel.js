@@ -7,6 +7,8 @@ export class Plugin extends PanelPlugin {
 			type: 'panel',
 			title: 'Панель меню',
 			name: 'MenuPanel',
+			version: '0.1.0',
+			withDependencies: true,
 		};
 	}
 
