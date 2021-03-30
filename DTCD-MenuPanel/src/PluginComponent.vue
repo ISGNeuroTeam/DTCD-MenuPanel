@@ -6,7 +6,7 @@
 import MenuPanel from './components/MenuPanel.vue';
 
 export default {
-  name: 'App',
+  name: 'PluginComponent',
   components: {
     MenuPanel,
   },

@@ -1,5 +1,5 @@
 import pluginMeta from './Plugin.Meta';
-import App from './App.vue';
+import PluginComponent from './PluginComponent.vue';
 
 import {PanelPlugin, EventSystemAdapter, StorageSystemAdapter, StyleSystemAdapter} from './../../DTCD-SDK/index';
 
@@ -22,7 +22,7 @@ export class Plugin extends PanelPlugin {
 		const VueJS = this.getDependence('Vue');
 
 		new VueJS.default({
-			render: h => h(App),
+			render: h => h(PluginComponent),
 			data() {
 				return {
 					guid,
