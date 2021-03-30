@@ -1,25 +1,44 @@
 <template>
-  <div class="menu-panel-container">
-    <div class="menu-panel-button-container">
-      <div id="changeModeBtn" class="btn" @click="changeEditMode" :class="{ pressed: editMode }">
-        <i class="fas fa-edit"></i> Режим {{ editMode ? 'просмотра' : 'редактирования' }}
+  <div class="container">
+    <div class="button-container">
+      <div
+        id="addNewPanelBtn"
+        class="btn"
+        title="Добавить панель"
+        @click="addNewWorkspacePanel"
+      >
+        <div class="icon">
+          <i class="fas fa-plus"/>
+        </div>
       </div>
-      <div id="addNewPanelBtn" class="btn" v-if="editMode" @click="defaultAddNewPanel">
-        <i class="fas fa-plus"></i> Добавить панель
-      </div>
-      <div id="compactWorkspaceBtn" class="btn" v-if="editMode" @click="compactWorkspacePanels">Выровнять</div>
-    </div>
-    <div v-if="editMode" class="menu-panel-theme-container">
-      <p>Выбрать тему:</p>
-      <div class="themes-container">
+      <transition name="fade" mode="out-in">
         <div
-          class="theme-btn"
-          :class="{ selected: theme.name === selectedTheme }"
-          v-for="theme in themes"
-          :key="theme.name"
-          :style="{ background: theme.preview }"
-          @click="changeTheme(theme.name)"
-        ></div>
+          v-if="isEditModeEnabled"
+          id="compactWorkspaceBtn"
+          class="btn"
+          title="Выровнять сетку"
+          @click="compactWorkspacePanels"
+        >
+          <div class="icon">
+            <i class="fas fa-outdent"/>
+          </div>
+        </div>
+      </transition>
+    </div>
+    <div class="button-container">
+      <div
+        id="changeModeBtn"
+        class="btn edit-mode-btn"
+        :class="{ active: isEditModeEnabled }"
+        :title="editModeButtonTitle"
+        @click="changeEditMode"
+      >
+        <div v-if="isEditModeEnabled" key="view-mode" class="icon">
+          <i class="far fa-eye"/>
+        </div>
+        <div v-else key="edit-mode" class="icon">
+          <i class="fas fa-pencil-alt"/>
+        </div>
       </div>
     </div>
   </div>
@@ -28,116 +47,114 @@
 <script>
 export default {
   name: 'MenuPanel',
-  data: () => ({
-    selectedTheme: 'light',
-    editMode: false,
-    themes: [],
+  data: (self) => ({
+    guid: self.$root.guid,
+    eventSystem: self.$root.eventSystem,
+    styleSystem: self.$root.styleSystem,
+    themeList: [],
+    isEditModeEnabled: false,
   }),
-  mounted() {
-    this.$root.eventSystem.createActionByCallback(
-      'updateTheme',
-      this.$root.guid,
-      this.updateTheme.bind(this)
-    );
-    this.$root.eventSystem.subscribeByNames('ThemeUpdate', 'updateTheme');
-
-    this.$root.styleSystem.getThemes().then(result => {
-      this.themes = result;
-      this.$root.styleSystem.setTheme(this.selectedTheme);
-    });
+  computed: {
+    editModeButtonTitle () {
+      const mode = this.isEditModeEnabled ? 'просмотра' : 'редактирования';
+      return `Включить режим ${mode}`;
+    }
+  },
+  async mounted () {
+    this.eventSystem.createActionByCallback('updateTheme', this.guid, this.updateTheme.bind(this));
+    this.eventSystem.subscribeByNames('ThemeUpdate', 'updateTheme');
+    const themes = await this.styleSystem.getThemes();
+    this.themeList.push(...themes);
   },
   methods: {
-    changeTheme(name) {
-      this.selectedTheme = name;
-      this.$root.styleSystem.setTheme(this.selectedTheme);
-      this.$root.eventSystem.createAndPublish(this.$root.guid, 'ThemeUpdate');
+    addNewWorkspacePanel () {
+      this.eventSystem.createAndPublish(this.guid, 'DefaultAddWorkspacePanel');
     },
-    compactWorkspacePanels() {
-      this.$root.eventSystem.createAndPublish(this.$root.guid, 'CompactWorkspacePanel');
+
+    compactWorkspacePanels () {
+      this.eventSystem.createAndPublish(this.guid, 'CompactWorkspacePanel');
     },
-    defaultAddNewPanel() {
-      this.$root.eventSystem.createAndPublish(this.$root.guid, 'DefaultAddWorkspacePanel');
+
+    changeEditMode () {
+      this.isEditModeEnabled = !this.isEditModeEnabled;
+      this.eventSystem.createAndPublish(this.guid, 'ChangeWorkspaceEditMode');
     },
-    changeEditMode() {
-      this.editMode = !this.editMode;
-      this.$root.eventSystem.createAndPublish(this.$root.guid, 'ChangeWorkspaceEditMode');
-    },
-    updateTheme() {
-      const themeObj = this.$root.styleSystem.getCurrentTheme();
-      this.$root.styleSystem.setVariablesToElement(this.$el, themeObj);
+
+    updateTheme () {
+      const theme = this.styleSystem.getCurrentTheme();
+      this.styleSystem.setVariablesToElement(this.$el, theme);
     },
   },
-};
+}
 </script>
 
-<style scoped>
-.menu-panel-container {
-  background-color: var(--secondary-bg-color-panel);
-  overflow-y: auto;
+<style lang="scss" scoped>
+@import './../styles/base';
+
+$c-blue: #2196F3;
+$c-green: #4CAF50;
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
   height: 100%;
-  font-size: 62.5%;
-  font-family: 'Gill Sans', sans-serif;
-  color: var(--text-color-dark);
-  padding: 10px;
-  box-sizing: border-box;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  align-content: flex-start;
-}
+  background-color: transparent;
+  padding: 15px;
 
-.menu-panel-button-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-.menu-panel-theme-container {
-  padding: 5px;
-}
-.btn {
-  background-color: var(--button-bg-color);
-  margin: 6px;
-  font-size: 1rem;
-  color: var(--button-text-color);
-  padding: 10px 20px;
-  text-align: center;
-  border-radius: 3px;
-  border: 2px solid transparent;
-}
+  .button-container {
+    display: flex;
+  }
 
-.btn:hover {
-  border-color: var(--button-hover-border);
-  color: var(--button-hover-text-color);
-  background-color: var(--button-hover-bg-color);
-}
-.btn:active {
-  transform: scale(0.98);
-}
-p {
-  margin: 0;
-  font-size: 1.1rem;
-}
+  .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: thin solid rgba(0, 0, 0, .25);
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 20px;
+    transition: $transition-time;
 
-.themes-container {
-  display: flex;
-  flex-wrap: wrap;
-}
+    &:first-child {
+      margin-left: 0;
+    }
 
-.theme-btn {
-  height: 2rem;
-  width: 2rem;
-  border-radius: 50%;
-  margin: 3px;
-  border: 3px solid transparent;
-  transition: 0.3s;
-}
-.selected {
-  border-color: black;
-}
-.pressed {
-  color: var(--button-bg-color);
-  background-color: white;
-  border-color: #2e99c4;
-}
-.pressed:hover {
+    &:hover {
+      color: $c-blue;
+      border-color: $c-blue;
+
+      & .icon {
+          color: $c-blue;
+        }
+    }
+
+    &.edit-mode-btn {
+      &.active {
+        color: $c-green;
+        border-color: $c-green;
+
+        & .icon {
+          color: $c-green;
+        }
+      }
+
+      &:hover {
+        border-color: $c-green;
+
+        .icon {
+          color: $c-green;
+        }
+      }
+    }
+
+    .icon {
+      color: #757575;
+      font-size: 16px;
+      transition: $transition-time;
+    }
+  }
 }
 </style>

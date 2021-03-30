@@ -1,48 +1,43 @@
-import path from 'path';
-
-import alias from '@rollup/plugin-alias';
-import commonjs from '@rollup/plugin-commonjs';
-import styles from 'rollup-plugin-styles';
-import image from '@rollup/plugin-image';
 import vue from 'rollup-plugin-vue2';
+import alias from '@rollup/plugin-alias';
+import styles from 'rollup-plugin-styles';
 import replace from '@rollup/plugin-replace';
+
+import path from 'path';
+import pluginMeta from './src/Plugin.Meta';
 
 const watch = Boolean(process.env.ROLLUP_WATCH);
 
-const pluginName = 'MenuPanel';
-
-const projectSrcDir = path.join(path.resolve(__dirname), 'src');
-
-const fileDest = watch ? `./../../DTCD/server/plugins/${pluginName}.js` : `./build/${pluginName}.js`;
+const pluginName = pluginMeta.name;
+const outputFile = `${pluginName}.js`;
+const outputDirectory = watch ? `./../../DTCD/server/plugins/DTCD-${pluginName}` : `./build`;
 
 const plugins = [
-	alias({
-		entries: {
-			'@': projectSrcDir,
-		},
-	}),
-	vue(),
-	commonjs(),
-	styles({
-		mode: 'inject',
-	}),
-	replace({
-		preventAssignment: true,
-		'process.env.NODE_ENV': JSON.stringify('production'),
-		'process.env.VUE_ENV': JSON.stringify('browser'),
-	}),
-	image(),
+  vue(),
+  alias({
+    entries: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  }),
+  styles({
+    mode: 'inject',
+  }),
+  replace({
+    preventAssignment: true,
+    'process.env.NODE_ENV': JSON.stringify('production'),
+    'process.env.VUE_ENV': JSON.stringify('browser'),
+  }),
 ];
 
 export default {
-	input: `src/${pluginName}`,
-	output: {
-		file: fileDest,
-		format: 'esm',
-		sourcemap: false,
-	},
-	watch: {
-		include: ['./src/**'],
-	},
-	plugins,
+  plugins,
+  input: `src/Plugin.js`,
+  output: {
+    file: `${outputDirectory}/${outputFile}`,
+    format: 'esm',
+    sourcemap: false,
+  },
+  watch: {
+    include: ['./src/**'],
+  },
 };
