@@ -1,4 +1,4 @@
-import {Plugin} from '../../src/MenuPanel';
+import {Plugin} from '../../src/Plugin';
 import {EventSystemAdapter, StorageSystemAdapter, StyleSystemAdapter} from './../../../DTCD-SDK/index';
 
 import MenuPanel from './../../src/components/MenuPanel.vue';

@@ -35,7 +35,7 @@ const plugins = [
 ];
 
 export default {
-	input: `src/${pluginName}`,
+	input: `src/Plugin.js`,
 	output: {
 		file: fileDest,
 		format: 'esm',
