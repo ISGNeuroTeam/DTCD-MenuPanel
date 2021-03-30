@@ -13,7 +13,7 @@ const pluginName = 'MenuPanel';
 
 const projectSrcDir = path.join(path.resolve(__dirname), 'src');
 
-const fileDest = watch ? `./../../DTCD/server/plugins/${pluginName}.js` : `./build/${pluginName}.js`;
+const fileDest = watch ? `./../../DTCD/server/plugins/DTCD-${pluginName}/${pluginName}.js` : `./build/${pluginName}.js`;
 
 const plugins = [
 	alias({
