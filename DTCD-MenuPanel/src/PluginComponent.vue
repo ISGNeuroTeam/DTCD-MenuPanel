@@ -1,5 +1,5 @@
-<template>
-  <MenuPanel />
+<template functional>
+  <MenuPanel/>
 </template>
 
 <script>
@@ -7,8 +7,6 @@ import MenuPanel from './components/MenuPanel.vue';
 
 export default {
   name: 'PluginComponent',
-  components: {
-    MenuPanel,
-  },
+  components: { MenuPanel },
 };
 </script>
