@@ -1,7 +1,6 @@
 import path from 'path';
 
 import alias from '@rollup/plugin-alias';
-import commonjs from '@rollup/plugin-commonjs';
 import styles from 'rollup-plugin-styles';
 import vue from 'rollup-plugin-vue2';
 import replace from '@rollup/plugin-replace';
@@ -21,7 +20,6 @@ const plugins = [
 		},
 	}),
 	vue(),
-	commonjs(),
 	styles({
 		mode: 'inject',
 	}),
