@@ -1,15 +1,11 @@
+import pluginMeta from './Plugin.Meta';
 import App from './App.vue';
+
 import {PanelPlugin, EventSystemAdapter, StorageSystemAdapter, StyleSystemAdapter} from './../../DTCD-SDK/index';
 
 export class Plugin extends PanelPlugin {
 	static getRegistrationMeta() {
-		return {
-			type: 'panel',
-			title: 'Панель меню',
-			name: 'MenuPanel',
-			version: '0.1.0',
-			withDependencies: true,
-		};
+		return pluginMeta;
 	}
 
 	constructor(guid, selector) {
