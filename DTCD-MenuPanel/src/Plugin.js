@@ -1,36 +1,38 @@
 import pluginMeta from './Plugin.Meta';
 import PluginComponent from './PluginComponent.vue';
 
-import {PanelPlugin, EventSystemAdapter, StorageSystemAdapter, StyleSystemAdapter} from './../../DTCD-SDK/index';
+import {
+  PanelPlugin,
+  EventSystemAdapter,
+  StyleSystemAdapter,
+  StorageSystemAdapter,
+} from './../../DTCD-SDK/index';
 
 export class Plugin extends PanelPlugin {
-	static getRegistrationMeta() {
-		return pluginMeta;
-	}
 
-	constructor(guid, selector) {
-		super();
-		let eventSystem = new EventSystemAdapter();
-		let styleSystem = new StyleSystemAdapter();
-		let storageSystem = new StorageSystemAdapter();
+  static getRegistrationMeta () {
+    return pluginMeta;
+  }
 
-		eventSystem.registerEvent(eventSystem.createEvent(guid, 'ChangeWorkspaceEditMode'));
-		eventSystem.registerEvent(eventSystem.createEvent(guid, 'DefaultAddWorkspacePanel'));
-		eventSystem.registerEvent(eventSystem.createEvent(guid, 'CompactWorkspacePanel'));
-		eventSystem.registerEvent(eventSystem.createEvent(guid, 'ThemeUpdate'));
+  constructor (guid, selector) {
+    super();
 
-		const VueJS = this.getDependence('Vue');
+    const eventSystem = new EventSystemAdapter();
+    const styleSystem = new StyleSystemAdapter();
+    const storageSystem = new StorageSystemAdapter();
 
-		new VueJS.default({
-			render: h => h(PluginComponent),
-			data() {
-				return {
-					guid,
-					eventSystem,
-					storageSystem,
-					styleSystem,
-				};
-			},
-		}).$mount(selector);
-	}
+    eventSystem.registerEvent(eventSystem.createEvent(guid, 'ChangeWorkspaceEditMode'));
+    eventSystem.registerEvent(eventSystem.createEvent(guid, 'DefaultAddWorkspacePanel'));
+    eventSystem.registerEvent(eventSystem.createEvent(guid, 'CompactWorkspacePanel'));
+    eventSystem.registerEvent(eventSystem.createEvent(guid, 'ThemeUpdate'));
+
+    const VueJS = this.getDependence('Vue');
+    const data = { guid, eventSystem, styleSystem, storageSystem };
+
+    new VueJS.default({
+      data: () => data,
+      render: h => h(PluginComponent),
+    }).$mount(selector);
+  }
+
 }
