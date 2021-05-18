@@ -1,9 +1,9 @@
-<template functional>
-  <MenuPanel/>
+<template>
+  <MenuPanel />
 </template>
 
 <script>
-import MenuPanel from './components/MenuPanel.vue';
+import MenuPanel from './components/MenuPanel';
 
 export default {
   name: 'PluginComponent',
