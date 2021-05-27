@@ -86,19 +86,19 @@ export default {
   },
   methods: {
     addNewWorkspacePanel() {
-      PubSub.publish('DefaultAddWorkspacePanel[' + this.guid + ']');
+      this.eventSystem.createAndPublish(this.guid, 'DefaultAddWorkspacePanel');
     },
 
     compactWorkspacePanels() {
-      PubSub.publish('CompactWorkspacePanel[' + this.guid + ']');
+      this.eventSystem.createAndPublish(this.guid, 'CompactWorkspacePanel');
     },
 
     changeEditMode() {
       this.isEditModeEnabled = !this.isEditModeEnabled;
-      PubSub.publish('ChangeWorkspaceEditMode[' + this.guid + ']');
+      this.eventSystem.createAndPublish(this.guid, 'ChangeWorkspaceEditMode');
     },
     backToWorkspaces() {
-      PubSub.publish('BackToWorkspaceSelection[' + this.guid + ']');
+      this.eventSystem.createAndPublish(this.guid, 'BackToWorkspaceSelection');
     },
     // changeTheme(name) {
     //   this.selectedTheme = name;
