@@ -20,6 +20,11 @@
           <i class="fas fa-pencil-alt" />
         </div>
       </div>
+      <div id="saveWorkspace" class="btn" title="Сохранить рабочий стол" @click="saveWorkspace">
+        <div class="icon">
+          <i style="color:grey;" class="fas fa-save" />
+        </div>
+      </div>
       <transition name="fade" mode="out-in">
         <div
           v-if="isEditModeEnabled"
@@ -86,19 +91,27 @@ export default {
   },
   methods: {
     addNewWorkspacePanel() {
-      this.eventSystem.createAndPublish(this.guid, 'DefaultAddWorkspacePanel');
+      this.$root.workspaceSystem.createEmptyCell();
+      // this.eventSystem.createAndPublish(this.guid, 'DefaultAddWorkspacePanel');
     },
 
     compactWorkspacePanels() {
-      this.eventSystem.createAndPublish(this.guid, 'CompactWorkspacePanel');
+      this.$root.workspaceSystem.compactAllPanels();
+      // this.eventSystem.createAndPublish(this.guid, 'CompactWorkspacePanel');
     },
 
     changeEditMode() {
       this.isEditModeEnabled = !this.isEditModeEnabled;
-      this.eventSystem.createAndPublish(this.guid, 'ChangeWorkspaceEditMode');
+      this.$root.workspaceSystem.changeMode();
+      // this.eventSystem.createAndPublish(this.guid, 'ChangeWorkspaceEditMode');
     },
     backToWorkspaces() {
-      this.eventSystem.createAndPublish(this.guid, 'BackToWorkspaceSelection');
+      this.$root.workspaceSystem.setDefaultConfiguration();
+      // this.eventSystem.createAndPublish(this.guid, 'BackToWorkspaceSelection');
+    },
+    saveWorkspace() {
+      this.$root.workspaceSystem.saveConfiguration();
+      // this.eventSystem.createAndPublish(this.guid, 'SaveWorkspaceConfigration');
     },
     // changeTheme(name) {
     //   this.selectedTheme = name;
@@ -198,6 +211,11 @@ $c-green: #4caf50;
   }
   .selected {
     border-color: black;
+  }
+
+  #saveWorkspace:hover {
+    color: none !important;
+    border-color: none !important;
   }
 }
 </style>
