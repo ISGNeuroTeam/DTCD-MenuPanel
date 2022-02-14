@@ -17,10 +17,10 @@ export class Plugin extends PanelPlugin {
   constructor(guid, selector) {
     super();
 
-    const eventSystem = new EventSystemAdapter();
-    const styleSystem = new StyleSystemAdapter();
-    const storageSystem = new StorageSystemAdapter();
-    const workspaceSystem = new WorkspaceSystemAdapter();
+    const eventSystem = new EventSystemAdapter('0.3.0', guid);
+    const styleSystem = new StyleSystemAdapter('0.3.1');
+    const storageSystem = new StorageSystemAdapter('0.4.0');
+    const workspaceSystem = new WorkspaceSystemAdapter('0.3.0');
 
     eventSystem.registerEvent(eventSystem.createEvent(guid, 'ThemeUpdate'));
 
